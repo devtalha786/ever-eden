@@ -1,8 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/store/cart/cartThunk';
 
 const ProductCard = ({ product, hovered, setHovered }) => {
+	const dispatch = useDispatch();
+	const handleAddToCart = () => {
+		dispatch(addToCart(product));
+	};
 	return (
 		<div
 			className='group'
@@ -69,7 +75,7 @@ const ProductCard = ({ product, hovered, setHovered }) => {
 			{/* Price */}
 			<div className='flex items-center gap-2 mt-1 cursor-pointer'>
 				<span className='text-[16px] font-normal leading-[21px]'>
-					{product.price}
+					${product.price}
 				</span>
 				{product.oldPrice && (
 					<span className='line-through text-[#918f8f] text-[16px] font-normal leading-[21px]'>
@@ -90,7 +96,10 @@ const ProductCard = ({ product, hovered, setHovered }) => {
 			</div>
 
 			{/* Button */}
-			<button className='w-full mt-7 border border-black py-4 text-xs font-bold uppercase tracking-[1px] transition-colors duration-200 bg-white hover:bg-[#ff4b85] hover:text-white hover:border-[#ff4b85]'>
+			<button
+				onClick={handleAddToCart}
+				className='w-full mt-7 border border-black py-4 text-xs font-bold uppercase tracking-[1px] transition-colors duration-200 bg-white hover:bg-[#ff4b85] hover:text-white hover:border-[#ff4b85]'
+			>
 				Add To Cart
 			</button>
 		</div>

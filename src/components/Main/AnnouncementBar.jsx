@@ -21,7 +21,7 @@ export default function AnnouncementBar() {
 	}, []);
 
 	return (
-		<div className='sticky top-0 z-[999] w-full bg-[#ff4b85] overflow-hidden'>
+		<div className='sticky top-0 z-40 w-full bg-[#ff4b85] overflow-hidden'>
 			<div className='relative h-[25px] md:h-[30px]'>
 				{messages.map((msg, index) => (
 					<div

@@ -1,114 +1,20 @@
-// 'use client';
-// import { useState, useEffect } from 'react';
-// import { Menu, X, Search, User, Heart, ShoppingBag } from 'lucide-react';
-// import MobileDrawer from './MobileDrawer';
-
-// export default function Header() {
-// 	const [isScrolled, setIsScrolled] = useState(false);
-// 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-// 	useEffect(() => {
-// 		const handleScroll = () => setIsScrolled(window.scrollY > 50);
-// 		window.addEventListener('scroll', handleScroll);
-// 		return () => window.removeEventListener('scroll', handleScroll);
-// 	}, []);
-
-// 	const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
-
-// 	return (
-// 		<>
-// 			{/* Header */}
-// 			<header
-// 				className={`fixed top-7 w-full z-50 transition-all duration-300 ${
-// 					isScrolled ? 'bg-white shadow-md py-2' : ' bg-white py-4'
-// 				}`}
-// 			>
-// 				<div className='max-w-[1400px] mx-auto flex items-center justify-between px-4 lg:px-8'>
-// 					{/* Left Nav Links */}
-// 					<nav className='hidden lg:flex items-center space-x-8 text-[14px] uppercase font-semibold tracking-[1.5px]'>
-// 						<a
-// 							href='#'
-// 							className='hover:text-[#ef8e74] transition-colors'
-// 						>
-// 							Skincare Quiz
-// 						</a>
-// 						<a
-// 							href='#'
-// 							className='hover:text-[#ef8e74] transition-colors'
-// 						>
-// 							Build Your Routine
-// 						</a>
-// 					</nav>
-
-// 					{/* Logo */}
-// 					<div className='text-2xl font-bold tracking-[2px] uppercase'>
-// 						<a href='/'>Evereden</a>
-// 					</div>
-
-// 					{/* Right Icons */}
-// 					<div className='flex items-center space-x-5'>
-// 						<a
-// 							href='#'
-// 							className='hidden lg:block hover:text-[#ef8e74]'
-// 						>
-// 							Rewards
-// 						</a>
-// 						<Search className='w-5 h-5 cursor-pointer hover:text-[#ef8e74]' />
-// 						<User className='w-5 h-5 cursor-pointer hover:text-[#ef8e74]' />
-// 						<ShoppingBag className='w-5 h-5 cursor-pointer hover:text-[#ef8e74]' />
-
-// 						{/* Hamburger for mobile */}
-// 						<button onClick={toggleDrawer} className='lg:hidden'>
-// 							{isDrawerOpen ? (
-// 								<X className='w-6 h-6' />
-// 							) : (
-// 								<Menu className='w-6 h-6' />
-// 							)}
-// 						</button>
-// 					</div>
-// 				</div>
-
-// 				{/* Bottom Nav (desktop only, hidden when scrolled) */}
-// 				<div
-// 					className={`hidden lg:flex justify-center space-x-10 mt-4 text-[13px] tracking-[1.2px] uppercase transition-all duration-300 ${
-// 						isScrolled
-// 							? 'opacity-0 pointer-events-none h-0'
-// 							: 'opacity-100 h-auto'
-// 					}`}
-// 				>
-// 					<a href='#' className='hover:text-[#ef8e74]'>
-// 						Best Sellers
-// 					</a>
-// 					<a href='#' className='hover:text-[#ef8e74]'>
-// 						New Arrivals
-// 					</a>
-// 					<a href='#' className='hover:text-[#ef8e74]'>
-// 						Collections
-// 					</a>
-// 					<a href='#' className='hover:text-[#ef8e74]'>
-// 						Baby Care
-// 					</a>
-// 					<a href='#' className='hover:text-[#ef8e74]'>
-// 						Skincare
-// 					</a>
-// 				</div>
-// 			</header>
-
-// 			{/* Mobile Drawer */}
-// 			<MobileDrawer open={isDrawerOpen} toggleDrawer={toggleDrawer} />
-// 		</>
-// 	);
-// }
-
 'use client';
 import { useState, useEffect } from 'react';
 import { Menu, X, Search, User, ShoppingBag } from 'lucide-react';
 import MobileDrawer from './MobileDrawer';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import CartDrawer from './Main/CartDrawer';
 
 export default function Header() {
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [isCartOpen, setIsCartOpen] = useState(false);
+	const { cartItems } = useSelector(state => state.cart);
+	const cartCount = cartItems.reduce(
+		(total, item) => total + item.quantity,
+		0
+	);
 
 	useEffect(() => {
 		const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -131,7 +37,7 @@ export default function Header() {
 	return (
 		<>
 			<header
-				className={`fixed top-7 left-0 w-full z-50 bg-white transition-all duration-300 ${
+				className={`fixed top-[25px] md:top-7 left-0 w-full z-50 bg-white transition-all duration-300 ${
 					isScrolled ? 'py-4' : 'py-4'
 				}`}
 			>
@@ -209,7 +115,19 @@ export default function Header() {
 						</a>
 						<Search className='w-5 h-5 cursor-pointer hover:text-[#ef8e74]' />
 						<User className='w-5 h-5 cursor-pointer hover:text-[#ef8e74]' />
-						<ShoppingBag className='w-5 h-5 cursor-pointer hover:text-[#ef8e74]' />
+						<button
+							type='button'
+							onClick={() => setIsCartOpen(true)}
+							className='relative cursor-pointer'
+							aria-label='Open cart'
+						>
+							<ShoppingBag className='w-5 h-5 hover:text-[#ef8e74]' />
+							{cartCount > 0 && (
+								<span className='absolute -top-3 -right-2 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md'>
+									{cartCount}
+								</span>
+							)}
+						</button>
 
 						{/* Hamburger */}
 						<button onClick={toggleDrawer} className='lg:hidden'>
@@ -244,6 +162,11 @@ export default function Header() {
 				</div>
 			</header>
 
+			{/* attach drawer at root level */}
+			<CartDrawer
+				open={isCartOpen}
+				onClose={() => setIsCartOpen(false)}
+			/>
 			{/* Mobile Drawer */}
 			<MobileDrawer open={isDrawerOpen} toggleDrawer={toggleDrawer} />
 		</>
