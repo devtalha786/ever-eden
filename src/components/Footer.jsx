@@ -9,7 +9,7 @@ export default function Footer() {
 					{/* Left side links */}
 					<div className='grid grid-cols-2 gap-5 flex-1 pt-8 order-2 lg:order-1'>
 						{/* First column */}
-						<ul>
+						<ul> 
 							{[
 								'EVEREDEN REWARDS',
 								'SHARE & EARN',
